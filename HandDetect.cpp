@@ -8,7 +8,7 @@
 
 using namespace cv;
 
-CvPoint P1,P2,P3,P4;
+CvPoint P1,P2,P3;
 
 void swap(int *x,int *y)
 {
@@ -56,17 +56,20 @@ int  Caldistance(CvPoint*Pt1,CvPoint*Pt2)
 	return dis;
 }
 
-int FindMax(int*M ,int length)
+int FindMax(int*M ,int Mask,int length)
 {
-	int Max = M[0];
+	int Max = 0;
 
 	int index =0;
 	for(int i =0; i < length; i++)
 	{
-		if (Max < M[i])
+		if (Mask!=i)
 		{
-			Max = M[i];
-			index = i;
+			if (Max < M[i])
+			{
+				Max = M[i];
+				index = i;
+			}
 		}
 	}
 
@@ -100,140 +103,263 @@ int FindMin(int*M ,int length)
 int  FindFirstpoint(CvPoint*Pt)
 {
 	int distance[6]= {0};
-	distance[0] = Caldistance(&Pt[0],&Pt[1]);
-	distance[1] = Caldistance(&Pt[0],&Pt[2]);
-	distance[2] = Caldistance(&Pt[0],&Pt[3]);
-	distance[3] = Caldistance(&Pt[1],&Pt[2]);
-	distance[4] = Caldistance(&Pt[1],&Pt[3]);
-	distance[5] = Caldistance(&Pt[2],&Pt[3]);
+	distance[0] = Caldistance(&Pt[0], &Pt[1]);//0
+	distance[1] = Caldistance(&Pt[0], &Pt[2]);//1
+	distance[2] = Caldistance(&Pt[0], &Pt[3]);//2
+	distance[3] = Caldistance(&Pt[1], &Pt[2]);//3
+	distance[4] = Caldistance(&Pt[1], &Pt[3]);//4
+	distance[5] = Caldistance(&Pt[2], &Pt[3]);//5
 
-	int index = FindMax(distance, 6);
-
-	if (0==index)
+	int index  = FindMax(distance, -1, 6);
+	int indexs = FindMax(distance, index, 6);
+//////////////////////////////////////////////////////////////////////////
+	if ((0 == index)&&(1 == indexs))
 	{
-		if (Pt[0].x < Pt[1].x)
-		{
-			P1 = Pt[0];
-			P4 = Pt[1];
-		}
-		else
-		{
-			P1 = Pt[1];
-			P4 = Pt[0];
-		}
+		P1 = Pt[0];//小指
+		P2 = Pt[2];
+		P3 = Pt[1];//最远点
+		return 1;
 	}
 
-	if (1==index)
+	if ((0 == index)&&(2 == indexs))
 	{
-		if (Pt[0].x < Pt[2].x)
-		{
-			P1 = Pt[0];
-			P4 = Pt[2];
-		}
-		else
-		{
-			P1 = Pt[2];
-			P4 = Pt[0];
-		}
+		P1 = Pt[0];//小指
+		P2 = Pt[3];
+		P3 = Pt[1];//最远点
+		return 1;
 	}
 
-	if (2==index)
+	if ((0 == index)&&(3 == indexs))
 	{
-		if (Pt[0].x < Pt[3].x)
-		{
-			P1 = Pt[0];
-			P4 = Pt[3];
-		}
-		else
-		{
-			P1 = Pt[3];
-			P4 = Pt[0];
-		}
+		P1 = Pt[1];//小指
+		P2 = Pt[2];
+		P3 = Pt[0];//最远点
+		return 1;
 	}
 
-	if (3==index)
+	if ((0 == index)&&(4 == indexs))
 	{
-		if (Pt[1].x < Pt[2].x)
-		{
-			P1 = Pt[1];
-			P4 = Pt[2];
-		}
-		else
-		{
-			P1 = Pt[2];
-			P4 = Pt[1];
-		}
+		P1 = Pt[1];//小指
+		P2 = Pt[3];
+		P3 = Pt[0];//最远点
+		return 1;
+	}
+//////////////////////////////////////////////////////////////////////////
+	if ((1 == index)&&(0 == indexs))
+	{
+		P1 = Pt[0];//小指
+		P2 = Pt[1];
+		P3 = Pt[2];//最远点
+		return 1;
 	}
 
-	if (4==index)
+	if ((1 == index)&&(2 == indexs))
 	{
-		if (Pt[1].x < Pt[3].x)
-		{
-			P1 = Pt[1];
-			P4 = Pt[3];
-		}
-		else
-		{
-			P1 = Pt[3];
-			P4 = Pt[1];
-		}
+		P1 = Pt[0];//小指
+		P2 = Pt[3];
+		P3 = Pt[2];//最远点
+		return 1;
 	}
 
-	if (5==index)
+	if ((1 == index)&&(3 == indexs))
 	{
-		if (Pt[2].x < Pt[3].x)
-		{
-			P1 = Pt[2];
-			P4 = Pt[3];
-		}
-		else
-		{
-			P1 = Pt[3];
-			P4 = Pt[2];
-		}
+		P1 = Pt[2];//小指
+		P2 = Pt[1];
+		P3 = Pt[0];//最远点
+		return 1;
+	}
+
+	if ((1 == index)&&(5 == indexs))
+	{
+		P1 = Pt[2];//小指
+		P2 = Pt[3];
+		P3 = Pt[0];//最远点
+		return 1;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	if ((2 == index)&&(0 == indexs))
+	{
+		P1 = Pt[0];//小指
+		P2 = Pt[1];
+		P3 = Pt[3];//最远点
+		return 1;
+	}
+
+	if ((2 == index)&&(1 == indexs))
+	{
+		P1 = Pt[0];//小指
+		P2 = Pt[2];
+		P3 = Pt[3];//最远点
+		return 1;
+	}
+
+	if ((2 == index)&&(4 == indexs))
+	{
+		P1 = Pt[3];//小指
+		P2 = Pt[1];
+		P3 = Pt[0];//最远点
+		return 1;
+	}
+
+	if ((2 == index)&&(5 == indexs))
+	{
+		P1 = Pt[3];//小指
+		P2 = Pt[2];
+		P3 = Pt[0];//最远点
+		return 1;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	if ((3 == index)&&(0 == indexs))
+	{
+		P1 = Pt[1];//小指
+		P2 = Pt[0];
+		P3 = Pt[2];//最远点
+		return 1;
+	}
+
+	if ((3 == index)&&(4 == indexs))
+	{
+		P1 = Pt[1];//小指
+		P2 = Pt[3];
+		P3 = Pt[2];//最远点
+		return 1;
+	}
+
+	if ((3 == index)&&(1 == indexs))
+	{
+		P1 = Pt[2];//小指
+		P2 = Pt[0];
+		P3 = Pt[1];//最远点
+		return 1;
+	}
+
+	if ((3 == index)&&(5 == indexs))
+	{
+		P1 = Pt[2];//小指
+		P2 = Pt[3];
+		P3 = Pt[1];//最远点
+		return 1;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	if ((4 == index)&&(0 == indexs))
+	{
+		P1 = Pt[1];//小指
+		P2 = Pt[0];
+		P3 = Pt[3];//最远点
+		return 1;
+	}
+
+	if ((4 == index)&&(3 == indexs))
+	{
+		P1 = Pt[1];//小指
+		P2 = Pt[2];
+		P3 = Pt[3];//最远点
+		return 1;
+	}
+
+	if ((4 == index)&&(2 == indexs))
+	{
+		P1 = Pt[3];//小指
+		P2 = Pt[0];
+		P3 = Pt[1];//最远点
+		return 1;
+	}
+
+	if ((4 == index)&&(5 == indexs))
+	{
+		P1 = Pt[3];//小指
+		P2 = Pt[2];
+		P3 = Pt[1];//最远点
+		return 1;
+	}
+	//////////////////////////////////////////////////////////////////////////
+	if ((5 == index)&&(1 == indexs))
+	{
+		P1 = Pt[2];//小指
+		P2 = Pt[0];
+		P3 = Pt[3];//最远点
+		return 1;
+	}
+
+	if ((5 == index)&&(3 == indexs))
+	{
+		P1 = Pt[2];//小指
+		P2 = Pt[1];
+		P3 = Pt[3];//最远点
+		return 1;
+	}
+
+	if ((5 == index)&&(2 == indexs))
+	{
+		P1 = Pt[3];//小指
+		P2 = Pt[0];
+		P3 = Pt[2];//最远点
+		return 1;
+	}
+
+	if ((5 == index)&&(4 == indexs))
+	{
+		P1 = Pt[3];//小指
+		P2 = Pt[1];
+		P3 = Pt[2];//最远点
+		return 1;
+	}
+
+	else
+	{
+		return -1;
 	}
 
 	return 0;
 }
 
-int  FindSecondpoint(CvPoint*Pt )
-{
-	int distance[4]= {0};
-	distance[0] = Caldistance(&P1,&Pt[0]);
-	distance[1] = Caldistance(&P1,&Pt[1]);
-	distance[2] = Caldistance(&P1,&Pt[2]);
-	distance[3] = Caldistance(&P1,&Pt[3]);
-
-	int index = FindMin(distance, 4);
-	P2 = Pt[index];
-
-
-	for (int i = 0; i < 4; i++)
-	{
-		P3 = Pt[i];
-		if ((P3.x!=P1.x)&&(P3.x!=P2.x)&&(P3.x!=P4.x))
-		{
-			break;
-		}
-	}
-
-	return 0;
-}
+//int  FindSecondpoint(CvPoint*Pt )
+//{
+//	int distance[4]= {0};
+//	distance[0] = Caldistance(&P1,&Pt[0]);
+//	distance[1] = Caldistance(&P1,&Pt[1]);
+//	distance[2] = Caldistance(&P1,&Pt[2]);
+//	distance[3] = Caldistance(&P1,&Pt[3]);
+//
+//	int index = FindMin(distance, 4);
+//	P2 = Pt[index];
+//
+//
+//	for (int i = 0; i < 4; i++)
+//	{
+//		P3 = Pt[i];
+//		if ((P3.x!=P1.x)&&(P3.x!=P2.x)&&(P3.x!=P4.x))
+//		{
+//			break;
+//		}
+//	}
+//
+//	return 0;
+//}
 
 int  JudgePointNum(CvPoint*Pt)
 {
-	FindFirstpoint(Pt);
-	FindSecondpoint(Pt);
-	int Dis1_3 = (P1.x - P3.x)*(P1.x - P3.x) + (P1.y - P3.y)*(P1.y - P3.y);
-	int Dis2_4 = (P2.x - P4.x)*(P2.x - P4.x) + (P2.y - P4.y)*(P2.y - P4.y);
+	int ret  = FindFirstpoint(Pt);
 
-	if (Dis1_3 > Dis2_4)
+	if (-1==ret)
+	{
+		return -1;
+	}
+
+	int Ax = P2.x - P1.x;
+	int Ay = P2.y - P1.y;
+	int Bx = P3.x - P1.x;
+	int By = P3.y - P1.y;
+
+	int directions = (Ax * By)-(Bx*Ay);
+
+	if (directions > 0)
 	{
 		return 0;
 	}
 	else
 		return 1;
-	return -1;
+	
 }
 
 CvSeq* contour = NULL;  
@@ -265,7 +391,7 @@ HANDDETECT_API int _stdcall   HandDetect(BYTE*Src, int w, int h)
 	cvSaveImage("Src.jpg",Img_d);
 #endif 
 
-	cvThreshold(Img,Img, 150, 255, 1);//二值化
+	cvThreshold(Img,Img, 100, 255, 1);//二值化
 	cvDilate(Img, Img);
 	cvDilate(Img, Img);
 	cvDilate(Img, Img);//膨胀
@@ -361,7 +487,7 @@ HANDDETECT_API int _stdcall   HandDetect(BYTE*Src, int w, int h)
 	#ifdef WIN_DEBUG
 	cvLine(Img_d,cvPoint(P1.x,P1.y),cvPoint(P2.x,P2.y),cvScalar(0,0,0),2);
 	cvLine(Img_d,cvPoint(P2.x,P2.y),cvPoint(P3.x,P3.y),cvScalar(0,0,0),2);
-	cvLine(Img_d,cvPoint(P3.x,P3.y),cvPoint(P4.x,P4.y),cvScalar(0,0,0),2);
+ 	cvLine(Img_d,cvPoint(P3.x,P3.y),cvPoint(P1.x,P1.y),cvScalar(0,0,0),2);
 
 	cvNamedWindow("Contour", 0); 
 	cvShowImage ("Contour", Img_d);
