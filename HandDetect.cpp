@@ -2,13 +2,14 @@
 #include "stdafx.h"
 #include "HandDetect.h"
 #include "opencv2/opencv.hpp"
+#include "math.h"
 
-//#define  WIN_DEBUG
+#define  WIN_DEBUG
 #define  PerThreshold 10
 
 using namespace cv;
 
-CvPoint P1,P2,P3;
+CvPoint P1,P2,P3,P4;
 
 void swap(int *x,int *y)
 {
@@ -116,192 +117,240 @@ int  FindFirstpoint(CvPoint*Pt)
 	if ((0 == index)&&(1 == indexs))
 	{
 		P1 = Pt[0];//小指
-		P2 = Pt[2];
+		P2 = Pt[2];//中指
 		P3 = Pt[1];//最远点
+
+		P4 = Pt[3];//无名
 		return 1;
 	}
 
 	if ((0 == index)&&(2 == indexs))
 	{
 		P1 = Pt[0];//小指
-		P2 = Pt[3];
+		P2 = Pt[3];//中指
 		P3 = Pt[1];//最远点
+
+		P4 = Pt[2];//无名
 		return 1;
 	}
 
 	if ((0 == index)&&(3 == indexs))
 	{
 		P1 = Pt[1];//小指
-		P2 = Pt[2];
+		P2 = Pt[2];//中指
 		P3 = Pt[0];//最远点
+
+		P4 = Pt[3];//无名
 		return 1;
 	}
 
 	if ((0 == index)&&(4 == indexs))
 	{
 		P1 = Pt[1];//小指
-		P2 = Pt[3];
+		P2 = Pt[3];//中指
 		P3 = Pt[0];//最远点
+
+		P4 = Pt[2];//无名
 		return 1;
 	}
 //////////////////////////////////////////////////////////////////////////
 	if ((1 == index)&&(0 == indexs))
 	{
 		P1 = Pt[0];//小指
-		P2 = Pt[1];
+		P2 = Pt[1];//中指
 		P3 = Pt[2];//最远点
+
+		P4 = Pt[3];//无名
 		return 1;
 	}
 
 	if ((1 == index)&&(2 == indexs))
 	{
 		P1 = Pt[0];//小指
-		P2 = Pt[3];
+		P2 = Pt[3];//中指
 		P3 = Pt[2];//最远点
+
+		P4 = Pt[1];//无名
 		return 1;
 	}
 
 	if ((1 == index)&&(3 == indexs))
 	{
 		P1 = Pt[2];//小指
-		P2 = Pt[1];
+		P2 = Pt[1];//中指
 		P3 = Pt[0];//最远点
+
+		P4 = Pt[3];//无名
 		return 1;
 	}
 
 	if ((1 == index)&&(5 == indexs))
 	{
 		P1 = Pt[2];//小指
-		P2 = Pt[3];
+		P2 = Pt[3];//中指
 		P3 = Pt[0];//最远点
+
+		P4 = Pt[1];//无名
 		return 1;
 	}
 	//////////////////////////////////////////////////////////////////////////
 	if ((2 == index)&&(0 == indexs))
 	{
 		P1 = Pt[0];//小指
-		P2 = Pt[1];
+		P2 = Pt[1];//中指
 		P3 = Pt[3];//最远点
+
+		P4 = Pt[2];//无名
 		return 1;
 	}
 
 	if ((2 == index)&&(1 == indexs))
 	{
 		P1 = Pt[0];//小指
-		P2 = Pt[2];
+		P2 = Pt[2];//中指
 		P3 = Pt[3];//最远点
+
+		P4 = Pt[1];//无名
 		return 1;
 	}
 
 	if ((2 == index)&&(4 == indexs))
 	{
 		P1 = Pt[3];//小指
-		P2 = Pt[1];
+		P2 = Pt[1];//中指
 		P3 = Pt[0];//最远点
+
+		P4 = Pt[2];//无名
 		return 1;
 	}
 
 	if ((2 == index)&&(5 == indexs))
 	{
 		P1 = Pt[3];//小指
-		P2 = Pt[2];
+		P2 = Pt[2];//中指
 		P3 = Pt[0];//最远点
+
+		P4 = Pt[1];//无名
 		return 1;
 	}
 	//////////////////////////////////////////////////////////////////////////
 	if ((3 == index)&&(0 == indexs))
 	{
 		P1 = Pt[1];//小指
-		P2 = Pt[0];
+		P2 = Pt[0];//中指
 		P3 = Pt[2];//最远点
+
+		P4 = Pt[3];//无名
 		return 1;
 	}
 
 	if ((3 == index)&&(4 == indexs))
 	{
 		P1 = Pt[1];//小指
-		P2 = Pt[3];
+		P2 = Pt[3];//中指
 		P3 = Pt[2];//最远点
+
+		P4 = Pt[0];//无名
 		return 1;
 	}
 
 	if ((3 == index)&&(1 == indexs))
 	{
 		P1 = Pt[2];//小指
-		P2 = Pt[0];
+		P2 = Pt[0];//中指
 		P3 = Pt[1];//最远点
+
+		P4 = Pt[3];//无名
 		return 1;
 	}
 
 	if ((3 == index)&&(5 == indexs))
 	{
 		P1 = Pt[2];//小指
-		P2 = Pt[3];
+		P2 = Pt[3];//中指
 		P3 = Pt[1];//最远点
+
+		P4 = Pt[0];//无名
 		return 1;
 	}
 	//////////////////////////////////////////////////////////////////////////
 	if ((4 == index)&&(0 == indexs))
 	{
 		P1 = Pt[1];//小指
-		P2 = Pt[0];
+		P2 = Pt[0];//中指
 		P3 = Pt[3];//最远点
+
+		P4 = Pt[2];//无名
 		return 1;
 	}
 
 	if ((4 == index)&&(3 == indexs))
 	{
 		P1 = Pt[1];//小指
-		P2 = Pt[2];
+		P2 = Pt[2];//中指
 		P3 = Pt[3];//最远点
+
+		P4 = Pt[0];//无名
 		return 1;
 	}
 
 	if ((4 == index)&&(2 == indexs))
 	{
 		P1 = Pt[3];//小指
-		P2 = Pt[0];
+		P2 = Pt[0];//中指
 		P3 = Pt[1];//最远点
+
+		P4 = Pt[2];//无名
 		return 1;
 	}
 
 	if ((4 == index)&&(5 == indexs))
 	{
 		P1 = Pt[3];//小指
-		P2 = Pt[2];
+		P2 = Pt[2];//中指
 		P3 = Pt[1];//最远点
+
+		P4 = Pt[0];//无名
 		return 1;
 	}
 	//////////////////////////////////////////////////////////////////////////
 	if ((5 == index)&&(1 == indexs))
 	{
 		P1 = Pt[2];//小指
-		P2 = Pt[0];
+		P2 = Pt[0];//中指
 		P3 = Pt[3];//最远点
+
+		P4 = Pt[1];//无名
 		return 1;
 	}
 
 	if ((5 == index)&&(3 == indexs))
 	{
 		P1 = Pt[2];//小指
-		P2 = Pt[1];
+		P2 = Pt[1];//中指
 		P3 = Pt[3];//最远点
+
+		P4 = Pt[0];//无名
 		return 1;
 	}
 
 	if ((5 == index)&&(2 == indexs))
 	{
 		P1 = Pt[3];//小指
-		P2 = Pt[0];
+		P2 = Pt[0];//中指
 		P3 = Pt[2];//最远点
+
+		P4 = Pt[1];//无名
 		return 1;
 	}
 
 	if ((5 == index)&&(4 == indexs))
 	{
 		P1 = Pt[3];//小指
-		P2 = Pt[1];
+		P2 = Pt[1];//中指
 		P3 = Pt[2];//最远点
+
+		P4 = Pt[0];//无名
 		return 1;
 	}
 
@@ -362,10 +411,62 @@ int  JudgePointNum(CvPoint*Pt)
 	
 }
 
+double CalAngle(int ret)
+{
+	double angle = 0.0;
+
+	int x = 1;
+	int y = 0;
+
+	int Ax = 0;//无名指向食指
+	int Ay = 0;
+	if (0==ret)
+	{
+	   Ax = P3.x - P4.x;//无名指向食指
+	   Ay = (300 - P3.y) - (300 - P4.y);
+	}
+
+	if (1==ret)
+	{
+		Ax = P4.x - P3.x;//食指-无名指
+		Ay = (300 - P4.y) - (300 - P3.y);
+	}
+
+	double cosB = abs(Ax)/sqrt(Ax*Ax + Ay*Ay); 
+	angle = acos(cosB)*180/3.1415;
+
+	//if (angle <30 )
+	//{
+	//	return 0;
+	//}
+
+	if ((Ax >=0)&&(Ay >= 0))
+	{
+		return angle;
+	}
+
+	if ((Ax >=0)&&(Ay <= 0))
+	{
+		angle = 0 - angle;
+	}
+
+	if ((Ax <=0)&&(Ay <= 0))
+	{
+		angle = angle - 180;
+	}
+
+	if ((Ax <=0)&&(Ay >= 0))
+	{
+		angle = 180 - angle;
+	}
+
+	return angle;
+}
+
 CvSeq* contour = NULL;  
 CvSeq* contour_i = NULL;//存放contour初始位置
 IplImage*Img = cvCreateImage(cvSize(300,300),8, 1);
-HANDDETECT_API int _stdcall   HandDetect(BYTE*Src, int w, int h)
+HANDDETECT_API int _stdcall   HandDetect(BYTE*Src, int w, int h, double*Angle)
 {
 	if (NULL==Src)
 	{
@@ -374,15 +475,17 @@ HANDDETECT_API int _stdcall   HandDetect(BYTE*Src, int w, int h)
 
 	int ret = -99;
 
+	IplImage*cvPhoto1 =	cvCreateImage(cvSize(w, h), 8, 3);
 	IplImage*cvPhoto =	cvCreateImage(cvSize(w, h), 8, 1);
-	for (int y = 0 ;y < cvPhoto->height; y++)
+	for (int y = 0 ;y < cvPhoto1->height; y++)
 	{
-		memcpy(cvPhoto->imageData+y*cvPhoto->widthStep, Src + y*cvPhoto->width,cvPhoto->width*sizeof(BYTE));//copy
+		memcpy(cvPhoto1->imageData+y*cvPhoto1->widthStep, Src + 3*y*cvPhoto1->width,3*cvPhoto1->width*sizeof(BYTE));//copy
 	}
 
-	
+	cvCvtColor(cvPhoto1,cvPhoto, CV_RGB2GRAY);
 	cvResize(cvPhoto, Img);//缩放
 	cvReleaseImage(&cvPhoto);
+	cvReleaseImage(&cvPhoto1);
 #ifdef WIN_DEBUG
 	IplImage*Img_d = cvCreateImage(cvSize(300,300),8, 1);
 	cvCopy(Img, Img_d);
@@ -479,15 +582,15 @@ HANDDETECT_API int _stdcall   HandDetect(BYTE*Src, int w, int h)
 				}
 			}
 			ret = JudgePointNum(mpoint);
+			*Angle = CalAngle( ret);
 		}
 	}
-
-	
 
 	#ifdef WIN_DEBUG
 	cvLine(Img_d,cvPoint(P1.x,P1.y),cvPoint(P2.x,P2.y),cvScalar(0,0,0),2);
 	cvLine(Img_d,cvPoint(P2.x,P2.y),cvPoint(P3.x,P3.y),cvScalar(0,0,0),2);
  	cvLine(Img_d,cvPoint(P3.x,P3.y),cvPoint(P1.x,P1.y),cvScalar(0,0,0),2);
+	cvLine(Img_d,cvPoint(P3.x,P3.y),cvPoint(P4.x,P4.y),cvScalar(0,0,0),2);
 
 	cvNamedWindow("Contour", 0); 
 	cvShowImage ("Contour", Img_d);

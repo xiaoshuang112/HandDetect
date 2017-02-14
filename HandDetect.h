@@ -6,4 +6,4 @@
 #endif
 
 
-HANDDETECT_API int _stdcall HandDetect(BYTE*Src, int w, int h); //依次输入灰度图像,宽，高。 返回0为左手，1为右手，-1为输入数据错误或无法识别
+HANDDETECT_API int _stdcall HandDetect(BYTE*Src, int w, int h, double*Angle); //依次输入灰度图像,宽，高。 返回0为左手，1为右手，-1为输入数据错误或无法识别
